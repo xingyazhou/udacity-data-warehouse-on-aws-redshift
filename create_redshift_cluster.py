@@ -5,8 +5,13 @@ import configparser
 import time
 from botocore.exceptions import ClientError
 
-# Create an IAM Role that makes Redshift able to access S3 bucket (ReadOnly)
-def create_iam_role():     
+def create_iam_role(): 
+    """ Create an IAM Role that makes Redshift able to access S3 bucket (ReadOnly)
+     
+    Returns:
+            an IAM Role 
+    """
+    
     # Create client for IAM
     iam = boto3.client('iam',aws_access_key_id=KEY,
                         aws_secret_access_key=SECRET,
@@ -43,6 +48,12 @@ def create_iam_role():
     return roleArn
 
 def create_redshift_cluster():
+    """ Create an Redshift Cluster
+     
+    Returns:
+            Endpoint (The DNS address of the Cluster)
+    """
+    
     # create client for redshift 
     host=""
     
@@ -87,8 +98,13 @@ def create_redshift_cluster():
     return host
 
 
-# Open an incoming TCP port to access the cluster ednpoint
 def open_tcp_port():
+    """ Open an incoming TCP port to access the cluster ednpoint
+     
+    Returns:
+            No return values
+    """
+    
     myClusterProps = redshift.describe_clusters(ClusterIdentifier=DWH_CLUSTER_IDENTIFIER)['Clusters'][0]
     ec2 = boto3.resource('ec2',
                        region_name="us-west-2",
@@ -111,7 +127,14 @@ def open_tcp_port():
     except Exception as e:
         print(e)
         
-if __name__=='__main__':
+if __name__=='__main__':   
+    """
+    - load DWH Configuration Params from a file 'dwh.cfg'    
+    - Creates redshift client   
+    - Create an IAM Role that makes Redshift able to access S3 bucket (ReadOnly)   
+    - Create Redshift Cluster   
+    - Open an incoming TCP port to access the cluster ednpoint
+    """
     
     # load DWH Params from a file
     config = configparser.ConfigParser()

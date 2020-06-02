@@ -192,7 +192,7 @@ INNER JOIN artists using (artist_id)
 )
                          
 SELECT
-    date_add('ms', ts, '1970-01-01') as start_time,
+    distinct date_add('ms', ts, '1970-01-01') as start_time,
     user_id,
     level,
     sa.song_id,
@@ -215,7 +215,7 @@ INSERT INTO songs(
     )
 
 SELECT 
-    song_id,
+    distinct song_id,
     title,
     artist_id,
     year,
@@ -234,7 +234,7 @@ INSERT INTO artists(
     )
     
 SELECT     
-    artist_id,
+    distinct artist_id,
     artist_name,
     artist_location,
     max(cast("artist_latitude" as float8)) AS "artist_latitude",
@@ -254,7 +254,7 @@ INSERT INTO users(
     )
   
 SELECT 
-    user_id,
+    distinct user_id,
     first_name,
     last_name,
     gender,
@@ -282,7 +282,7 @@ WITH times AS(
 )
 
 SELECT
-    start_time,
+    distinct distinct start_time,
     EXTRACT (hour FROM start_time) as hour,
     EXTRACT (day FROM start_time) as day,
     EXTRACT (week FROM start_time) as week,
